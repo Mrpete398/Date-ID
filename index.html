@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vrei să mai facem vreo escapadă?💖</title>
+    
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <style>
+        /* ================= CSS VARIABLES & RESET ================= */
+        :root {
+            --primary-pink: #ff6b8b;
+            --light-pink: #ffe4e8;
+            --bg-color: #ffb6c1;
+            --text-dark: #333;
+            --white: #ffffff;
+            --shadow: 0 10px 30px rgba(255, 105, 139, 0.2);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--light-pink);
+            background-image: linear-gradient(135deg, var(--light-pink) 0%, #ffc0cb 100%);
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden; /* REZOLVARE FINALA: Taie complet scroll-ul pe tot ecranul, inimioarele nu mai pot strica layout-ul */
+            position: relative;
+        }
+
+        /* ================= FLOATING HEARTS ANIMATION ================= */
+        .hearts-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .heart {
+            position: absolute;
+            font-size: 1.5rem;
+            color: var(--primary-pink);
+            opacity: 0.6;
+            animation: floatUp 5s linear infinite;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(105vh) scale(0.5); opacity: 0; }
+            50% { opacity: 0.8; }
+            100% { transform: translateY(-10vh) scale(1.2); opacity: 0; }
+        }
+
+        /* ================= CARD DESIGN ================= */
+        .card {
+            background: var(--white);
+            border-radius: 24px;
+            box-shadow: var(--shadow);
+            padding: 2rem;
+            width: 90%;
+            max-width: 550px;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+            transition: transform 0.3s ease;
+            max-height: 85vh; /* Cardul nu va depăși ecranul */
+            overflow-y: auto;  /* REZOLVARE: Doar cardul primește scroll curat dacă opțiunile sunt lungi */
+            margin: auto;
+        }
+
+        /* Ascunde scrollbar-ul urât din interiorul cardului pentru un design mai curat */
+        .card::-webkit-scrollbar {
+            width: 6px;
+        }
+        .card::-webkit-scrollbar-thumb {
+            background-color: var(--bg-color);
+            border-radius: 10px;
+        }
+
+        .step {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .step.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        h1, h2 {
+            color: var(--primary-pink);
+            margin-bottom: 1.5rem;
+        }
+
+        p { color: var(--text-dark); margin-bottom: 1rem; }
+
+        /* ================= BUTTONS & INPUTS ================= */
+        .btn-group {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1rem;
+            min-height: 60px;
+            position: relative;
+        }
+
+        button {
+            background-color: var(--primary-pink);
+            color: var(--white);
+            border: none;
+            padding: 12px 24px;
+            font-size: 1.1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.2s, transform 0.1s ease;
+            box-shadow: 0 4px 10px rgba(255, 107, 139, 0.3);
+        }
+
+        button:hover {
+            background-color: #ff477e;
+            transform: translateY(-2px);
+        }
+
+        #nu-btn {
+            background-color: #f8f9fa;
+            color: var(--text-dark);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            z-index: 100;
+        }
+
+        /* Grid standard pentru opțiuni scurte (ore, filme) */
+        .grid-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 12px;
+            margin-top: 1rem;
+        }
+
+        /* Listă specială pe verticală pentru opțiunile lungi de la Pasul 6 */
+        .list-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 1rem;
+        }
+
+        .option-card {
+            background: var(--light-pink);
+            padding: 14px 20px;
+            border-radius: 16px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 1rem;
+            font-weight: bold;
+            color: var(--text-dark);
+            border: 2px solid transparent;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .option-card:hover {
+            background: #ffc0cb;
+            transform: translateX(5px);
+        }
+
+        input[type="date"] {
+            padding: 12px;
+            border-radius: 12px;
+            border: 2px solid var(--light-pink);
+            font-size: 1.1rem;
+            width: 100%;
+            margin-bottom: 1rem;
+            outline: none;
+            color: var(--text-dark);
+        }
+
+        input[type="date"]:focus {
+            border-color: var(--primary-pink);
+        }
+
+        .summary-box {
+            background: var(--light-pink);
+            padding: 20px;
+            border-radius: 16px;
+            text-align: left;
+            margin-bottom: 20px;
+            line-height: 1.8;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="hearts-container" id="hearts-container"></div>
+
+    <div class="card">
+        
+        <div id="step-1" class="step active">
+            <h1 style="font-size: 2rem; margin-top: 10px;">Vrei să facem o nouă escapadă?💖</h1>
+            <div class="btn-group">
+                <button onclick="acceptDate()">DA ❤️</button>
+                <button id="nu-btn" onmouseover="moveNoBtn()" onclick="moveNoBtn()" ontouchstart="moveNoBtnMobile(event)">NU sunt OCUPATĂ 😑</button>
+            </div>
+        </div>
+
+        <div id="step-2" class="step">
+            <h2>Când ne vedem? 📅</h2>
+            <input type="date" id="date-picker">
+            <button onclick="saveOption('date', document.getElementById('date-picker').value, 3)">Continuă ➡️</button>
+        </div>
+
+        <div id="step-3" class="step">
+            <h2>La ce oră? ⏰</h2>
+            <div class="grid-options">
+                <div class="option-card" onclick="saveOption('time', '16:00', 4)">16:00</div>
+                <div class="option-card" onclick="saveOption('time', '17:00', 4)">17:00</div> 
+                <div class="option-card" onclick="saveOption('time', '18:00', 4)">18:00</div>
+                <div class="option-card" onclick="saveOption('time', '19:00', 4)">19:00</div>
+            </div>
+        </div>
+
+        <div id="step-4" class="step">
+            <h2>Unde mergem?(Ţinând cont de caniculă choose wisely...🥵) 📍</h2>
+            <div class="grid-options">
+                <div class="option-card" onclick="saveOption('place', 'Mall ☕', 5)">☕ Mall</div>
+                <div class="option-card" onclick="saveOption('place', 'Plimbare pe Centrul Vechi 🫣', 5)">🫣 Plimbare pe Centrul Vechi</div>
+                <div class="option-card" onclick="saveOption('place', 'Parc 🌳', 5)">🌳 Parc</div>
+                <div class="option-card" onclick="saveOption('place', 'At your place 😜', 5)">😜 Ori pur si simplu at your place</div> 
+            </div>
+        </div>
+
+        <div id="step-5" class="step">
+            <h2>Ce film vedem? 🎬</h2>
+            <div class="grid-options">
+                <div class="option-card" onclick="saveOption('movie', 'Comedie Romantică', 6)">Comedie Romantică 😆</div>
+                <div class="option-card" onclick="saveOption('movie', 'Horror/Gore', 6)">Horror/Gore 👻</div>
+                <div class="option-card" onclick="saveOption('movie', 'Acțiune', 6)">Acțiune 💥</div>
+                <div class="option-card" onclick="saveOption('movie', 'Sci-Fi', 6)">Sci-Fi 👽</div>
+                <div class="option-card" onclick="saveOption('movie', 'Deocheate', 6)">Deocheate 😶</div>
+            </div>
+        </div>
+
+        <div id="step-6" class="step">
+            <h2>Ce mai facem? 🎯</h2>
+            <div class="list-options">
+                <div class="option-card" onclick="saveOption('activity', 'Mă baţi la macao(jucăm pe provocări de orice fel)', 7)">😏 Mă baţi la macao (jucăm pe provocări de orice fel)</div>
+                <div class="option-card" onclick="saveOption('activity', 'Te bat la alte jocuri cu cărţi', 7)">🙂 Te bat la alte jocuri cu cărţi</div>
+                <div class="option-card" onclick="saveOption('activity', 'Ne plângem de viaţă, povestim tot felul', 7)">🫠 Ne plângem de viaţă, povestim tot felul</div>
+                <div class="option-card" onclick="saveOption('activity', 'Diferite jocuri pe hârtie(includem desenat)', 7)">📝 Diferite jocuri pe hârtie (includem desenat)</div>
+                <div class="option-card" onclick="saveOption('activity', 'Lenevimmm chilling', 7)">😮‍💨 Lenevimmm chilling</div>
+                <div class="option-card" onclick="saveOption('activity', 'Toate de mai sus', 7)">😉 Toate de mai sus</div>
+                <div class="option-card" onclick="saveOption('activity', 'Aproape toate de mai sus...', 7)">🙂‍↔️ Aproape toate de mai sus...</div>
+                <div class="option-card" onclick="saveOption('activity', 'Toate de mai sus plus altele', 7)">🥴 Toate de mai sus plus altele</div>
+            </div>
+        </div>
+
+        <div id="step-7" class="step">
+            <h2>Rezumatul escapadei noastre 🤓</h2>
+            <div class="summary-box" id="summary-content"></div>
+            <button id="confirm-btn">Confirmi? 🫢</button>
+        </div>
+
+        <div id="step-8" class="step">
+            <h1>Yay! Ne vedem curând!!!</h1>
+            <p>Până atunci să fim sănătoşi zic...🫡</p>
+        </div>
+
+    </div>
+
+    <script>
+        /* ================= CONFIGURARE SUPABASE ================= */
+        const supabaseUrl = 'https://newggdlwrlkheceadogj.supabase.co';
+        const supabaseKey = 'sb_publishable_GU2w7_ltmIwZmYycGvw38Q_Bkb6zdoF';
+        
+        let supabaseClient;
+        try {
+            supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
+        } catch (e) {
+            console.warn("Supabase nu a putut fi inițializat.");
+        }
+
+        /* ================= STATE MANAGEMENT ================= */
+        const dateData = {
+            date: '',
+            time: '',
+            place: '',
+            movie: '',
+            activity: ''
+        };
+
+        /* ================= LOGICĂ BUTON NO ================= */
+        let noBtnScale = 1;
+
+        function moveNoBtn() {
+            const noBtn = document.getElementById('nu-btn');
+            noBtn.style.position = 'fixed';
+            
+            // Limităm mișcarea strict în interiorul ferestrei vizibile
+            const x = Math.random() * (window.innerWidth - noBtn.offsetWidth - 60) + 30;
+            const y = Math.random() * (window.innerHeight - noBtn.offsetHeight - 60) + 30;
+            
+            noBtn.style.left = `${x}px`;
+            noBtn.style.top = `${y}px`;
+
+            if (noBtnScale > 0.4) {
+                noBtnScale -= 0.08;
+                noBtn.style.transform = `scale(${noBtnScale})`;
+            }
+        }
+
+        function moveNoBtnMobile(e) {
+            e.preventDefault();
+            moveNoBtn();
+        }
+
+        /* ================= NAVIGARE ================= */
+        function acceptDate() {
+            triggerConfetti();
+            goToStep(2);
+        }
+
+        function goToStep(stepNumber) {
+            document.querySelectorAll('.step').forEach(step => step.classList.remove('active'));
+            const targetStep = document.getElementById(`step-${stepNumber}`);
+            if (targetStep) {
+                targetStep.classList.add('active');
+            }
+
+            if (stepNumber === 7) {
+                generateSummary();
+            }
+        }
+
+        function saveOption(key, value, nextStepNum) {
+            if (!value) {
+                alert("Te rog alege o opțiune! 🥺");
+                return;
+            }
+            dateData[key] = value;
+            goToStep(nextStepNum);
+        }
+
+        function generateSummary() {
+            const summaryHTML = `
+                <p><strong>📅 Când:</strong> ${dateData.date}</p>
+                <p><strong>⏰ Ora:</strong> ${dateData.time}</p>
+                <p><strong>📍 Unde:</strong> ${dateData.place}</p>
+                <p><strong>🎬 Film:</strong> ${dateData.movie}</p>
+                <p><strong>🎯 Activitate:</strong> ${dateData.activity}</p>
+            `;
+            document.getElementById('summary-content').innerHTML = summaryHTML;
+        }
+
+        /* ================= SALVARE ÎN BAZA DE DATE ================= */
+        document.getElementById('confirm-btn').addEventListener('click', async () => {
+            const confirmBtn = document.getElementById('confirm-btn');
+            confirmBtn.innerText = "Se salvează... ⏳";
+            confirmBtn.disabled = true;
+
+            const payload = {
+                ...dateData,
+                confirmed_at: new Date().toISOString()
+            };
+
+            if (supabaseClient) {
+                try {
+                    const { error } = await supabaseClient
+                        .from('date_plans')
+                        .insert([payload]);
+
+                    if (error) {
+                        console.error('Eroare la salvare:', error);
+                    }
+                } catch (err) {
+                    console.error('Eroare rețea/Supabase:', err);
+                }
+            }
+
+            triggerMassiveConfetti();
+            goToStep(8);
+        });
+
+        /* ================= EFECTE VIZUALE ================= */
+        function triggerConfetti() {
+            if (typeof confetti === 'function') {
+                confetti({
+                    particleCount: 100,
+                    spread: 70,
+                    origin: { y: 0.6 },
+                    colors: ['#ff6b8b', '#ffc0cb', '#ffffff']
+                });
+            }
+        }
+
+        function triggerMassiveConfetti() {
+            if (typeof confetti === 'function') {
+                const duration = 3000;
+                const end = Date.now() + duration;
+
+                (function frame() {
+                    confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#ff6b8b', '#ffc0cb'] });
+                    confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#ff6b8b', '#ffc0cb'] });
+                    if (Date.now() < end) { requestAnimationFrame(frame); }
+                }());
+            }
+        }
+
+        function createFloatingHearts() {
+            const container = document.getElementById('hearts-container');
+            if (!container) return;
+            setInterval(() => {
+                const heart = document.createElement('div');
+                heart.classList.add('heart');
+                heart.innerHTML = '❤️';
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.animationDuration = (Math.random() * 3 + 4) + 's';
+                container.appendChild(heart);
+                setTimeout(() => { heart.remove(); }, 7000);
+            }, 600);
+        }
+
+        createFloatingHearts();
+    </script>
+</body>
+</html>
