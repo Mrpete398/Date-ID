@@ -62,11 +62,11 @@
     width: 100vw;
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
     overflow-x: hidden;
     overflow-y: auto;
     position: relative;
-    padding: 10px 0;
+    padding: 8vh 0 20px 0;
 }
 
 
@@ -672,7 +672,7 @@
 
                     <button onclick="acceptDate()">DA ❤️</button>
 
-                    <button id="nu-btn" onmouseover="moveNoBtn()" onclick="moveNoBtn()" ontouchstart="moveNoBtnMobile(event)">NU sunt OCUPATĂ 😑</button>
+                    <button id="nu-btn" onmouseover="moveNoBtn()" ontouchstart="moveNoBtnMobile(event)">NU sunt OCUPATĂ 😑</button>
 
                 </div>
 
@@ -870,36 +870,27 @@
 
         let noBtnScale = 1;
 
-
-
         function moveNoBtn() {
-
             const noBtn = document.getElementById('nu-btn');
-
             noBtn.style.position = 'fixed';
 
-            
+            const rect = noBtn.getBoundingClientRect();
+            const w = rect.width || 150;
+            const h = rect.height || 50;
 
-            const x = Math.random() * (window.innerWidth - noBtn.offsetWidth - 120) + 60;
+            const maxX = Math.max(window.innerWidth - w - 20, 20);
+            const maxY = Math.max(window.innerHeight - h - 20, 20);
 
-            const y = Math.random() * (window.innerHeight - noBtn.offsetHeight - 120) + 60;
-
-            
+            const x = Math.random() * maxX + 10;
+            const y = Math.random() * maxY + 10;
 
             noBtn.style.left = `${x}px`;
-
             noBtn.style.top = `${y}px`;
 
-
-
             if (noBtnScale > 0.4) {
-
                 noBtnScale -= 0.08;
-
                 noBtn.style.transform = `scale(${noBtnScale})`;
-
             }
-
         }
 
 
