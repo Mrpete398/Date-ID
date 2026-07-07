@@ -1,444 +1,614 @@
 <!DOCTYPE html>
 <html lang="ro">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>În caz că n-ai vzt pe whatsapp mesajul, apasă aici!!!</title>
-    
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    
-    <style>
-        /* ================= CSS VARIABLES & RESET ================= */
-        :root {
-            --primary-pink: #ff6b8b;
-            --light-pink: #ffe4e8;
-            --bg-color: #ffb6c1;
-            --text-dark: #333;
-            --white: #ffffff;
-            --shadow: 0 10px 30px rgba(255, 105, 139, 0.2);
-        }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vrei să mai facem vreo escapadă? ☁️🐻</title>
+    
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <style>
+        /* ================= CSS VARIABLES & RESET ================= */
+        :root {
+            --primary-blue: #4A90E2;
+            --light-blue: #87CEEB;
+            --sky-top: #56CCF2;
+            --sky-bottom: #2F80ED;
+            --text-dark: #2C3E50;
+            --white: #ffffff;
+        }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
 
-        body {
-            background-color: var(--light-pink);
-            background-image: linear-gradient(135deg, var(--light-pink) 0%, #ffc0cb 100%);
-            height: 100vh;
-            width: 100vw;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden; /* REZOLVARE FINALA: Taie complet scroll-ul pe tot ecranul, inimioarele nu mai pot strica layout-ul */
-            position: relative;
-        }
+        body {
+            background-color: var(--light-blue);
+            background-image: linear-gradient(180deg, var(--sky-top) 0%, #DFF1FF 100%);
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
 
-        /* ================= FLOATING HEARTS ANIMATION ================= */
-        .hearts-container {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 0;
-            overflow: hidden;
-        }
+        /* ================= FLOATING BEARS ANIMATION ================= */
+        .bears-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
 
-        .heart {
-            position: absolute;
-            font-size: 1.5rem;
-            color: var(--primary-pink);
-            opacity: 0.6;
-            animation: floatUp 5s linear infinite;
-        }
+        .bear {
+            position: absolute;
+            width: 80px;
+            height: 100px;
+            opacity: 0.9;
+            animation: floatUp 8s linear infinite, sway 3s ease-in-out infinite alternate;
+        }
 
-        @keyframes floatUp {
-            0% { transform: translateY(105vh) scale(0.5); opacity: 0; }
-            50% { opacity: 0.8; }
-            100% { transform: translateY(-10vh) scale(1.2); opacity: 0; }
-        }
+        @keyframes floatUp {
+            0% { transform: translateY(110vh) scale(0.6); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-20vh) scale(1.1); opacity: 0; }
+        }
 
-        /* ================= CARD DESIGN ================= */
-        .card {
-            background: var(--white);
-            border-radius: 24px;
-            box-shadow: var(--shadow);
-            padding: 2rem;
-            width: 90%;
-            max-width: 550px;
-            text-align: center;
-            position: relative;
-            z-index: 10;
-            transition: transform 0.3s ease;
-            max-height: 85vh; /* Cardul nu va depăși ecranul */
-            overflow-y: auto;  /* REZOLVARE: Doar cardul primește scroll curat dacă opțiunile sunt lungi */
-            margin: auto;
-        }
+        @keyframes sway {
+            0% { margin-left: -20px; }
+            100% { margin-left: 20px; }
+        }
 
-        /* Ascunde scrollbar-ul urât din interiorul cardului pentru un design mai curat */
-        .card::-webkit-scrollbar {
-            width: 6px;
-        }
-        .card::-webkit-scrollbar-thumb {
-            background-color: var(--bg-color);
-            border-radius: 10px;
-        }
+        /* ================= CARTOON CLOUD CONTAINER ================= */
+        .cloud-container {
+            position: relative;
+            width: 95%;
+            max-width: 670px;
+            aspect-ratio: 650 / 480;
+            z-index: 10;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            animation: cloudFloat 4s ease-in-out infinite alternate;
+        }
 
-        .step {
-            display: none;
-            animation: fadeIn 0.5s ease;
-        }
+        @keyframes cloudFloat {
+            0% { transform: translateY(0px); }
+            100% { transform: translateY(-12px); }
+        }
 
-        .step.active {
-            display: block;
-        }
+        .cloud-pop {
+            animation: cloudPopAnim 0.4s ease-out !important;
+        }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.95); }
-            to { opacity: 1; transform: scale(1); }
-        }
+        @keyframes cloudPopAnim {
+            0% { transform: scale(1) translateY(0px); }
+            50% { transform: scale(1.06) translateY(-5px); }
+            100% { transform: scale(1) translateY(0px); }
+        }
 
-        h1, h2 {
-            color: var(--primary-pink);
-            margin-bottom: 1.5rem;
-        }
+        .cloud-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
 
-        p { color: var(--text-dark); margin-bottom: 1rem; }
+        /* Zona centrală de conținut */
+        .card {
+            position: relative;
+            z-index: 5;
+            width: 66%; 
+            height: 52%; 
+            margin-top: 20px; 
+            text-align: center;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
 
-        /* ================= BUTTONS & INPUTS ================= */
-        .btn-group {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            margin-top: 1rem;
-            min-height: 60px;
-            position: relative;
-        }
+        .step {
+            display: none;
+            width: 100%;
+            animation: fadeIn 0.4s ease;
+        }
 
-        button {
-            background-color: var(--primary-pink);
-            color: var(--white);
-            border: none;
-            padding: 12px 24px;
-            font-size: 1.1rem;
-            border-radius: 50px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: background-color 0.2s, transform 0.1s ease;
-            box-shadow: 0 4px 10px rgba(255, 107, 139, 0.3);
-        }
+        .step.active {
+            display: grid;
+            place-items: center;
+            align-content: center;
+        }
 
-        button:hover {
-            background-color: #ff477e;
-            transform: translateY(-2px);
-        }
+        #step-7.step.active {
+    display: flex;
+    flex-direction: column;
+    justify-content: center; 
+    align-items: center;
+    gap: 15px; 
+    height: 100%;
+    animation: fadeInStep7suggestii 0.4s ease forwards;
+}
+#step7-continue-btn {
+    position: absolute;
+    left: 50%;
+    bottom: -55px;
+    transform: translateX(-50%);
+}
+#confirm-btn {
+    position: absolute;
+    left: 50%;
+    bottom: -55px;
+    transform: translateX(-50%);
+}
 
-        #nu-btn {
-            background-color: #f8f9fa;
-            color: var(--text-dark);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            z-index: 100;
-        }
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
 
-        /* Grid standard pentru opțiuni scurte (ore, filme) */
-        .grid-options {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-            gap: 12px;
-            margin-top: 1rem;
-        }
+@keyframes fadeInStep7 {
+   from { opacity: 0; transform: translateX(45px) scale(0.97); }
+    to { opacity: 1; transform: translateX(45px) scale(1); }
+}
 
-        /* Listă specială pe verticală pentru opțiunile lungi de la Pasul 6 */
-        .list-options {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin-top: 1rem;
-        }
+        h1, h2 {
+            color: var(--primary-blue);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+            font-weight: 800;
+            padding: 0;
+            width: 100%;
+        }
 
-        .option-card {
-            background: var(--light-pink);
-            padding: 14px 20px;
-            border-radius: 16px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            font-size: 1rem;
-            font-weight: bold;
-            color: var(--text-dark);
-            border: 2px solid transparent;
-            text-align: left;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
+        /* AJUSTARE NOUĂ: Coboară specific doar titlul de la rezumat */
+        #step-8 h2 {
+            margin-top: 25px; /* Îl coboară de la marginea de sus */
+            margin-bottom: 0; /* Previne împingerea întregului bloc de text prea jos */
+        }
+#step-7 h2 {
+    margin-top: 20px;
+    margin-bottom: 0;
+}
+        p { color: var(--text-dark); margin-bottom: 0.8rem; font-weight: 600; width: 100%; }
 
-        .option-card:hover {
-            background: #ffc0cb;
-            transform: translateX(5px);
-        }
+        /* ================= BUTTONS & INPUTS ================= */
+        .btn-group {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 0.5rem;
+            min-height: 55px;
+            position: relative;
+            width: 100%;
+        }
 
-        input[type="date"] {
-            padding: 12px;
-            border-radius: 12px;
-            border: 2px solid var(--light-pink);
-            font-size: 1.1rem;
-            width: 100%;
-            margin-bottom: 1rem;
-            outline: none;
-            color: var(--text-dark);
-        }
+        button {
+            background-color: var(--primary-blue);
+            color: var(--white);
+            border: none;
+            padding: 10px 24px;
+            font-size: 1.1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.2s, transform 0.1s ease;
+            box-shadow: 0 4px 10px rgba(74, 144, 226, 0.3);
+            margin: 0; 
+        }
 
-        input[type="date"]:focus {
-            border-color: var(--primary-pink);
-        }
+        button:hover {
+            background-color: #357ABD;
+            transform: translateY(-2px);
+        }
 
-        .summary-box {
-            background: var(--light-pink);
-            padding: 20px;
-            border-radius: 16px;
-            text-align: left;
-            margin-bottom: 20px;
-            line-height: 1.8;
-        }
-    </style>
+        #nu-btn {
+            background-color: #f8f9fa;
+            color: var(--text-dark);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            z-index: 100;
+        }
+
+        .grid-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(105px, 1fr));
+            gap: 8px;
+            margin-top: 0.5rem;
+            width: 95%;
+        }
+
+        .list-options {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 0.3rem;
+            max-height: 165px;
+            overflow-y: auto;
+            width: 100%;
+            align-items: center;
+        }
+        
+        .list-options::-webkit-scrollbar {
+            width: 0px;
+        }
+
+        .option-card {
+            background: #F0F8FF;
+            padding: 10px 14px;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.95rem;
+            font-weight: bold;
+            color: var(--text-dark);
+            border: 2px solid #E2E8F0;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: 90%; 
+            margin: 0 auto;
+        }
+
+        .option-card:hover {
+            background: #DFF1FF;
+            border-color: var(--primary-blue);
+            transform: scale(1.02);
+        }
+
+         input[type="date"] {
+            padding: 10px;
+            border-radius: 15px;
+            border: 2px solid #CBD5E1;
+            font-size: 1.1rem;
+            width: 85%;
+            margin: 0 auto 1rem auto;
+            outline: none;
+            color: var(--text-dark);
+            background: #F0F8FF;
+            display: block;
+        }
+
+        #suggestions-input {
+            padding: 14px 16px;
+            border-radius: 15px;
+            border: 2px solid #CBD5E1;
+            font-size: 1rem;
+            width: 88%;
+           min-height: 110px;
+    max-height: 140px;
+            resize: none;
+            outline: none;
+            color: var(--text-dark);
+            background: #F0F8FF;
+            font-family: inherit;
+            margin: 0 auto 1rem auto;
+            display: block;
+        }
+
+        .summary-box {
+            text-align: left;
+            line-height: 1.6;
+            font-size: 0.95rem;
+            width: 100%;
+            margin: 0;
+        }
+        
+        .summary-box p {
+            margin-bottom: 5px;
+        }
+    </style>
 </head>
 <body>
 
-    <div class="hearts-container" id="hearts-container"></div>
+    <div class="bears-container" id="bears-container"></div>
 
-    <div class="card">
-        
-        <div id="step-1" class="step active">
-            <h1 style="font-size: 2rem; margin-top: 10px;">Vrei să facem o nouă escapadă?💖</h1>
-            <div class="btn-group">
-                <button onclick="acceptDate()">DA ❤️</button>
-                <button id="nu-btn" onmouseover="moveNoBtn()" onclick="moveNoBtn()" ontouchstart="moveNoBtnMobile(event)">NU sunt OCUPATĂ 😑</button>
-            </div>
-        </div>
+    <div class="cloud-container" id="cloud-container">
+        <svg class="cloud-background" viewBox="0 0 650 480" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <filter id="soft-shadow" x="-10%" y="-10%" width="130%" height="130%">
+                    <feDropShadow dx="0" dy="12" stdDeviation="12" flood-color="#2F80ED" flood-opacity="0.15"/>
+                </filter>
+            </defs>
+            
+            <g filter="url(#soft-shadow)">
+                <path d="M 160,370 
+                         C 100,370 60,320 60,260 
+                         C 60,200 110,160 170,160 
+                         C 170,110 220,60 290,60 
+                         C 350,60 390,95 410,130 
+                         C 440,100 490,100 530,120 
+                         C 580,150 600,200 590,250 
+                         C 610,270 620,300 610,330 
+                         C 590,370 540,380 490,380
+                         C 420,380 230,370 160,370 Z" 
+                      fill="#FFFFFF" />
 
-        <div id="step-2" class="step">
-            <h2>Când ne vedem? 📅</h2>
-            <input type="date" id="date-picker">
-            <button onclick="saveOption('date', document.getElementById('date-picker').value, 3)">Continuă ➡️</button>
-        </div>
+                <path d="M 85,295 C 130,355 220,360 290,360 C 400,360 520,365 565,335 C 540,360 480,370 410,370 C 240,370 140,350 85,295 Z" 
+                      fill="#F1F5F9" />
+                      
+                <path d="M 85,230 C 85,190 120,175 160,175 M 210,100 C 240,75 290,75 330,85 M 460,125 C 490,115 520,125 540,145" 
+                      stroke="#F8FAFC" stroke-width="6" stroke-linecap="round" fill="none" />
+            </g>
+        </svg>
 
-        <div id="step-3" class="step">
-            <h2>La ce oră? ⏰</h2>
-            <div class="grid-options">
-                <div class="option-card" onclick="saveOption('time', '16:00', 4)">16:00</div>
-                <div class="option-card" onclick="saveOption('time', '17:00', 4)">17:00</div> 
-                <div class="option-card" onclick="saveOption('time', '18:00', 4)">18:00</div>
-                <div class="option-card" onclick="saveOption('time', '19:00', 4)">19:00</div>
-            </div>
-        </div>
+        <div class="card">
+            
+            <div id="step-1" class="step active">
+                <h1>Vrei să facem o nouă escapadă? ☁️✈️</h1>
+                <div class="btn-group">
+                    <button onclick="acceptDate()">DA ❤️</button>
+                    <button id="nu-btn" onmouseover="moveNoBtn()" onclick="moveNoBtn()" ontouchstart="moveNoBtnMobile(event)">NU sunt OCUPATĂ 😑</button>
+                </div>
+            </div>
 
-        <div id="step-4" class="step">
-            <h2>Unde mergem?(Ţinând cont de caniculă choose wisely...🥵) 📍</h2>
-            <div class="grid-options">
-                <div class="option-card" onclick="saveOption('place', 'Mall ☕', 5)">☕ Mall</div>
-                <div class="option-card" onclick="saveOption('place', 'Plimbare pe Centrul Vechi 🫣', 5)">🫣 Plimbare pe Centrul Vechi</div>
-                <div class="option-card" onclick="saveOption('place', 'Parc 🌳', 5)">🌳 Parc</div>
-                <div class="option-card" onclick="saveOption('place', 'At your place 😜', 5)">😜 Ori pur si simplu at your place</div> 
-            </div>
-        </div>
+            <div id="step-2" class="step">
+                <h2>Când ne vedem? 📅</h2>
+                <input type="date" id="date-picker">
+                <button onclick="triggerPop(); saveOption('date', document.getElementById('date-picker').value, 3)">Continuă ➡️</button>
+            </div>
 
-        <div id="step-5" class="step">
-            <h2>Ce film vedem? 🎬</h2>
-            <div class="grid-options">
-                <div class="option-card" onclick="saveOption('movie', 'Comedie Romantică', 6)">Comedie Romantică 😆</div>
-                <div class="option-card" onclick="saveOption('movie', 'Horror/Gore', 6)">Horror/Gore 👻</div>
-                <div class="option-card" onclick="saveOption('movie', 'Acțiune', 6)">Acțiune 💥</div>
-                <div class="option-card" onclick="saveOption('movie', 'Sci-Fi', 6)">Sci-Fi 👽</div>
-                <div class="option-card" onclick="saveOption('movie', 'Deocheate', 6)">Deocheate 😶</div>
-            </div>
-        </div>
+            <div id="step-3" class="step">
+                <h2>La ce oră? ⏰</h2>
+                <div class="grid-options">
+                    <div class="option-card" onclick="triggerPop(); saveOption('time', '16:00', 4)">16:00</div>
+                    <div class="option-card" onclick="triggerPop(); saveOption('time', '17:00', 4)">17:00</div> 
+                    <div class="option-card" onclick="triggerPop(); saveOption('time', '18:00', 4)">18:00</div>
+                    <div class="option-card" onclick="triggerPop(); saveOption('time', '19:00', 4)">19:00</div>
+                </div>
+            </div>
 
-        <div id="step-6" class="step">
-            <h2>Ce mai facem? 🎯</h2>
-            <div class="list-options">
-                <div class="option-card" onclick="saveOption('activity', 'Mă baţi la macao(jucăm pe provocări de orice fel)', 7)">😏 Mă baţi la macao (jucăm pe provocări de orice fel)</div>
-                <div class="option-card" onclick="saveOption('activity', 'Te bat la alte jocuri cu cărţi', 7)">🙂 Te bat la alte jocuri cu cărţi</div>
-                <div class="option-card" onclick="saveOption('activity', 'Ne plângem de viaţă, povestim tot felul', 7)">🫠 Ne plângem de viaţă, povestim tot felul</div>
-                <div class="option-card" onclick="saveOption('activity', 'Diferite jocuri pe hârtie(includem desenat)', 7)">📝 Diferite jocuri pe hârtie (includem desenat)</div>
-                <div class="option-card" onclick="saveOption('activity', 'Lenevimmm chilling', 7)">😮‍💨 Lenevimmm chilling</div>
-                <div class="option-card" onclick="saveOption('activity', 'Toate de mai sus', 7)">😉 Toate de mai sus</div>
-                <div class="option-card" onclick="saveOption('activity', 'Aproape toate de mai sus...', 7)">🙂‍↔️ Aproape toate de mai sus...</div>
-                <div class="option-card" onclick="saveOption('activity', 'Toate de mai sus plus altele', 7)">🥴 Toate de mai sus plus altele</div>
-            </div>
-        </div>
+            <div id="step-4" class="step">
+                <h2>Unde mergem? 📍</h2>
+                <div class="grid-options">
+                    <div class="option-card" onclick="triggerPop(); saveOption('place', 'Mall ☕', 5)">☕ Mall</div>
+                    <div class="option-card" onclick="triggerPop(); saveOption('place', 'Plimbare pe Centrul Vechi 🫣', 5)">🫣 Centrul Vechi</div>
+                    <div class="option-card" onclick="triggerPop(); saveOption('place', 'Parc 🌳', 5)">🌳 Parc</div>
+                    <div class="option-card" onclick="triggerPop(); saveOption('place', 'At your place 😜', 5)">😜 At your place</div> 
+                </div>
+            </div>
 
-        <div id="step-7" class="step">
-            <h2>Rezumatul escapadei noastre 🤓</h2>
-            <div class="summary-box" id="summary-content"></div>
-            <button id="confirm-btn">Confirmi? 🫢</button>
-        </div>
+            <div id="step-5" class="step">
+                <h2>Ce film vedem? 🎬</h2>
+                <div class="grid-options">
+                    <div class="option-card" onclick="triggerPop(); saveOption('movie', 'Comedie Romantică', 6)">Comedie 😆</div>
+                    <div class="option-card" onclick="saveOption('movie', 'Horror/Gore', 6)">Horror 👻</div>
+                    <div class="option-card" onclick="triggerPop(); saveOption('movie', 'Acțiune', 6)">Acțiune 💥</div>
+                    <div class="option-card" onclick="triggerPop(); saveOption('movie', 'Sci-Fi', 6)">Sci-Fi 👽</div>
+                    <div class="option-card" onclick="triggerPop(); saveOption('movie', 'Deocheate', 6)">Deocheate 😶</div>
+                </div>
+            </div>
 
-        <div id="step-8" class="step">
-            <h1>Yay! Ne vedem curând!!!</h1>
-            <p>Până atunci să fim sănătoşi zic...🫡</p>
-        </div>
+            <div id="step-6" class="step">
+                <h2>Ce mai facem? 🎯</h2>
+                <div class="list-options">
+                    <div class="option-card" onclick="triggerPop(); saveOption('activity', 'Mă baţi la macao (jucăm pe provocări)', 7)">😏 Mă baţi la macao</div>
+                    <div class="option-card" onclick="triggerPop(); saveOption('activity', 'Te bat la alte jocuri cu cărţi', 7)">🙂 Te bat la cărţi</div>
+                    <div class="option-card" onclick="triggerPop(); saveOption('activity', 'Ne plângem de viaţă, povestim', 7)">🫠 Ne plângem de viaţă</div>
+                    <div class="option-card" onclick="triggerPop(); saveOption('activity', 'Diferite jocuri pe hârtie', 7)">📝 Jocuri pe hârtie</div>
+                    <div class="option-card" onclick="triggerPop(); saveOption('activity', 'Lenevimmm chilling', 7)">😮‍💨 Chilling</div>
+                    <div class="option-card" onclick="triggerPop(); saveOption('activity', 'Toate de mai sus', 7)">😉 Toate de mai sus</div>
+                </div>
+            </div>
 
-    </div>
+           <div id="step-7" class="step">
+    <h2>Alte idei sau sugestii? 💡</h2>
+    <textarea id="suggestions-input" placeholder="Scrie aici orice idee, sugestie sau ce ai chef să adaugi... (opțional)"></textarea>
+<button id="step7-continue-btn" onclick="saveSuggestions()">Continuă ➡️</button>
+</div>
 
-    <script>
-        /* ================= CONFIGURARE SUPABASE ================= */
-        const supabaseUrl = 'https://newggdlwrlkheceadogj.supabase.co';
-        const supabaseKey = 'sb_publishable_GU2w7_ltmIwZmYycGvw38Q_Bkb6zdoF';
-        
-        let supabaseClient;
-        try {
-            supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
-        } catch (e) {
-            console.warn("Supabase nu a putut fi inițializat.");
-        }
+<div id="step-8" class="step">
+    <h2>Rezumatul escapadei noastre 🤓</h2>
+    <div class="summary-box" id="summary-content"></div>
+    <button id="confirm-btn">Confirmi? 🫢</button>
+</div>
 
-        /* ================= STATE MANAGEMENT ================= */
-        const dateData = {
-            date: '',
-            time: '',
-            place: '',
-            movie: '',
-            activity: ''
-        };
+            <div id="step-9" class="step">
+                <h1>Yay! Ne vedem curând!!! 🐻🎈</h1>
+                <p>Până atunci să fim sănătoşi zic...🫡</p>
+            </div>
 
-        /* ================= LOGICĂ BUTON NO ================= */
-        let noBtnScale = 1;
+        </div>
+    </div>
 
-        function moveNoBtn() {
-            const noBtn = document.getElementById('nu-btn');
-            noBtn.style.position = 'fixed';
-            
-            // Limităm mișcarea strict în interiorul ferestrei vizibile
-            const x = Math.random() * (window.innerWidth - noBtn.offsetWidth - 60) + 30;
-            const y = Math.random() * (window.innerHeight - noBtn.offsetHeight - 60) + 30;
-            
-            noBtn.style.left = `${x}px`;
-            noBtn.style.top = `${y}px`;
+    <script>
+        /* ================= CONFIGURARE SUPABASE ================= */
+        const supabaseUrl = 'https://newggdlwrlkheceadogj.supabase.co';
+        const supabaseKey = 'sb_publishable_GU2w7_ltmIwZmYycGvw38Q_Bkb6zdoF';
+        
+        let supabaseClient;
+        try {
+            supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
+        } catch (e) {
+            console.warn("Supabase nu a putut fi inițializat.");
+        }
 
-            if (noBtnScale > 0.4) {
-                noBtnScale -= 0.08;
-                noBtn.style.transform = `scale(${noBtnScale})`;
-            }
-        }
+        /* ================= STATE MANAGEMENT ================= */
+        const dateData = { date: '', time: '', place: '', movie: '', activity: '', suggestions: '' };
 
-        function moveNoBtnMobile(e) {
-            e.preventDefault();
-            moveNoBtn();
-        }
+        /* ================= ANIMATIE POP ================= */
+        function triggerPop() {
+            const container = document.getElementById('cloud-container');
+            container.classList.add('cloud-pop');
+            setTimeout(() => {
+                container.classList.remove('cloud-pop');
+            }, 400);
+        }
 
-        /* ================= NAVIGARE ================= */
-        function acceptDate() {
-            triggerConfetti();
-            goToStep(2);
-        }
+        /* ================= LOGICĂ BUTON NO ================= */
+        let noBtnScale = 1;
 
-        function goToStep(stepNumber) {
-            document.querySelectorAll('.step').forEach(step => step.classList.remove('active'));
-            const targetStep = document.getElementById(`step-${stepNumber}`);
-            if (targetStep) {
-                targetStep.classList.add('active');
-            }
+        function moveNoBtn() {
+            const noBtn = document.getElementById('nu-btn');
+            noBtn.style.position = 'fixed';
+            
+            const x = Math.random() * (window.innerWidth - noBtn.offsetWidth - 120) + 60;
+            const y = Math.random() * (window.innerHeight - noBtn.offsetHeight - 120) + 60;
+            
+            noBtn.style.left = `${x}px`;
+            noBtn.style.top = `${y}px`;
 
-            if (stepNumber === 7) {
-                generateSummary();
-            }
-        }
+            if (noBtnScale > 0.4) {
+                noBtnScale -= 0.08;
+                noBtn.style.transform = `scale(${noBtnScale})`;
+            }
+        }
 
-        function saveOption(key, value, nextStepNum) {
-            if (!value) {
-                alert("Te rog alege o opțiune! 🥺");
-                return;
-            }
-            dateData[key] = value;
-            goToStep(nextStepNum);
-        }
+        function moveNoBtnMobile(e) {
+            e.preventDefault();
+            moveNoBtn();
+        }
 
-        function generateSummary() {
-            const summaryHTML = `
-                <p><strong>📅 Când:</strong> ${dateData.date}</p>
-                <p><strong>⏰ Ora:</strong> ${dateData.time}</p>
-                <p><strong>📍 Unde:</strong> ${dateData.place}</p>
-                <p><strong>🎬 Film:</strong> ${dateData.movie}</p>
-                <p><strong>🎯 Activitate:</strong> ${dateData.activity}</p>
-            `;
-            document.getElementById('summary-content').innerHTML = summaryHTML;
-        }
+        /* ================= NAVIGARE ================= */
+        function acceptDate() {
+            triggerPop();
+            triggerConfetti();
+            goToStep(2);
+        }
 
-        /* ================= SALVARE ÎN BAZA DE DATE ================= */
-        document.getElementById('confirm-btn').addEventListener('click', async () => {
-            const confirmBtn = document.getElementById('confirm-btn');
-            confirmBtn.innerText = "Se salvează... ⏳";
-            confirmBtn.disabled = true;
+        function goToStep(stepNumber) {
+    if (stepNumber === 8) {
+        generateSummary();
+    }
 
-            const payload = {
-                ...dateData,
-                confirmed_at: new Date().toISOString()
-            };
+    document.querySelectorAll('.step').forEach(step => step.classList.remove('active'));
+    
+    const targetStep = document.getElementById(`step-${stepNumber}`);
+    if (targetStep) {
+        targetStep.classList.add('active');
+    }
 
-            if (supabaseClient) {
-                try {
-                    const { error } = await supabaseClient
-                        .from('date_plans')
-                        .insert([payload]);
+    if (stepNumber === 8) { 
+        triggerPop();
+    }
+}
 
-                    if (error) {
-                        console.error('Eroare la salvare:', error);
-                    }
-                } catch (err) {
-                    console.error('Eroare rețea/Supabase:', err);
-                }
-            }
+function saveOption(key, value, nextStepNum) {
+    if (!value) {
+        alert("Te rog alege o opțiune! 🥺");
+        return;
+    }
+    dateData[key] = value;
+    goToStep(nextStepNum);
+}
 
-            triggerMassiveConfetti();
-            goToStep(8);
-        });
+function saveSuggestions() {
+    triggerPop();
+    dateData.suggestions = document.getElementById('suggestions-input').value.trim();
+    goToStep(8);
+}
 
-        /* ================= EFECTE VIZUALE ================= */
-        function triggerConfetti() {
-            if (typeof confetti === 'function') {
-                confetti({
-                    particleCount: 100,
-                    spread: 70,
-                    origin: { y: 0.6 },
-                    colors: ['#ff6b8b', '#ffc0cb', '#ffffff']
-                });
-            }
-        }
+function generateSummary() {
+    const suggestionsLine = dateData.suggestions
+        ? `<p><strong>💡 Sugestii:</strong> ${dateData.suggestions}</p>`
+        : '';
+    const summaryHTML = `
+        <p><strong>📅 Când:</strong> ${dateData.date}</p>
+        <p><strong>⏰ Ora:</strong> ${dateData.time}</p>
+        <p><strong>📍 Unde:</strong> ${dateData.place}</p>
+        <p><strong>🎬 Film:</strong> ${dateData.movie}</p>
+        <p><strong>🎯 Activitate:</strong> ${dateData.activity}</p>
+        ${suggestionsLine}
+    `;
+    document.getElementById('summary-content').innerHTML = summaryHTML;
+}
 
-        function triggerMassiveConfetti() {
-            if (typeof confetti === 'function') {
-                const duration = 3000;
-                const end = Date.now() + duration;
+        /* ================= SALVARE ÎN BAZA DE DATE ================= */
+        document.getElementById('confirm-btn').addEventListener('click', async () => {
+            const confirmBtn = document.getElementById('confirm-btn');
+            confirmBtn.innerText = "Se salvează... ⏳";
+            confirmBtn.disabled = true;
 
-                (function frame() {
-                    confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#ff6b8b', '#ffc0cb'] });
-                    confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#ff6b8b', '#ffc0cb'] });
-                    if (Date.now() < end) { requestAnimationFrame(frame); }
-                }());
-            }
-        }
+            const payload = { ...dateData, confirmed_at: new Date().toISOString() };
 
-        function createFloatingHearts() {
-            const container = document.getElementById('hearts-container');
-            if (!container) return;
-            setInterval(() => {
-                const heart = document.createElement('div');
-                heart.classList.add('heart');
-                heart.innerHTML = '❤️';
-                heart.style.left = Math.random() * 100 + 'vw';
-                heart.style.animationDuration = (Math.random() * 3 + 4) + 's';
-                container.appendChild(heart);
-                setTimeout(() => { heart.remove(); }, 7000);
-            }, 600);
-        }
+            if (supabaseClient) {
+                try {
+                    const { error } = await supabaseClient.from('date_plans').insert([payload]);
+                    if (error) console.error('Eroare la salvare:', error);
+                } catch (err) {
+                    console.error('Eroare rețea/Supabase:', err);
+                }
+            }
+            triggerMassiveConfetti();
+            goToStep(9);
+        });
 
-        createFloatingHearts();
-    </script>
+        /* ================= EFECTE VIZUALE ================= */
+        function triggerConfetti() {
+            if (typeof confetti === 'function') {
+                confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 }, colors: ['#4A90E2', '#87CEEB', '#ffffff'] });
+            }
+        }
+
+        function triggerMassiveConfetti() {
+            if (typeof confetti === 'function') {
+                const duration = 3000;
+                const end = Date.now() + duration;
+                (function frame() {
+                    confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#4A90E2', '#ffffff'] });
+                    confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#4A90E2', '#ffffff'] });
+                    if (Date.now() < end) { requestAnimationFrame(frame); }
+                }());
+            }
+        }
+
+        /* ================= FLOATING CHUBBY BEARS ================= */
+        const bearColors = ['#FF9AA2', '#FFB7B2', '#FFDAC1', '#E2F0CB', '#B5EAD7', '#C7CEEA', '#F1CBFF'];
+
+        function createFloatingBears() {
+            const container = document.getElementById('bears-container');
+            if (!container) return;
+            
+            setInterval(() => {
+                const bear = document.createElement('div');
+                bear.classList.add('bear');
+                
+                const randomColor = bearColors[Math.floor(Math.random() * bearColors.length)];
+                bear.style.color = randomColor;
+                bear.style.left = Math.random() * 80 + 'vw';
+                bear.style.animationDuration = (Math.random() * 5 + 6) + 's, ' + (Math.random() * 2 + 2) + 's';
+
+                bear.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 120" width="100%" height="100%">
+                        <path d="M50 95 Q 45 105, 55 115" stroke="rgba(0,0,0,0.15)" stroke-width="2.5" fill="none"/>
+                        <circle cx="30" cy="25" r="12" fill="currentColor"/>
+                        <circle cx="70" cy="25" r="12" fill="currentColor"/>
+                        <circle cx="28" cy="90" r="10" fill="currentColor"/>
+                        <circle cx="72" cy="90" r="10" fill="currentColor"/>
+                        <circle cx="18" cy="55" r="9" fill="currentColor"/>
+                        <circle cx="82" cy="55" r="9" fill="currentColor"/>
+                        <circle cx="50" cy="65" r="35" fill="currentColor"/>
+                        <circle cx="50" cy="70" r="22" fill="rgba(255,255,255,0.4)"/>
+                        <circle cx="50" cy="35" r="22" fill="currentColor"/>
+                        <circle cx="50" cy="40" r="8" fill="rgba(255,255,255,0.7)"/>
+                        <circle cx="50" cy="38" r="3" fill="#555"/>
+                        <circle cx="42" cy="31" r="2.5" fill="#555"/>
+                        <circle cx="58" cy="31" r="2.5" fill="#555"/>
+                    </svg>
+                `;
+                
+                container.appendChild(bear);
+                setTimeout(() => { bear.remove(); }, 12000);
+            }, 900);
+        }
+
+        createFloatingBears();
+    </script>
 </body>
 </html>
