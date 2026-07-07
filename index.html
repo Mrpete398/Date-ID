@@ -138,26 +138,12 @@
         /* ================= CARTOON CLOUD CONTAINER ================= */
 
         .cloud-container {
-
-            position: relative;
-
-            width: 95%;
-
-            max-width: 670px;
-
-            aspect-ratio: 650 / 480;
-
-            z-index: 10;
-
-            display: flex;
-
-            justify-content: center;
-
-            align-items: center;
-
-            animation: cloudFloat 4s ease-in-out infinite alternate;
-
-        }
+    position: relative;
+    width: 92%;
+    max-width: 480px;
+    z-index: 10;
+    animation: cloudFloat 4s ease-in-out infinite alternate;
+}
 
 
 
@@ -191,53 +177,30 @@
 
 
 
-        .cloud-background {
-
-            position: absolute;
-
-            top: 0;
-
-            left: 0;
-
-            width: 100%;
-
-            height: 100%;
-
-            z-index: 1;
-
-            pointer-events: none;
-
-        }
+        
 
 
 
         /* Zona centrală de conținut */
 
         .card {
-
-            position: relative;
-
-            z-index: 5;
-
-            width: 66%; 
-
-            height: 52%; 
-
-            margin-top: 20px; 
-
-            text-align: center;
-
-            padding: 10px;
-
-            display: flex;
-
-            flex-direction: column;
-
-            justify-content: center;
-
-            align-items: center;
-
-        }
+    position: relative;
+    z-index: 5;
+    width: 100%;
+    background: rgba(255, 249, 196, 0.55);
+    border: 3px solid rgba(255, 213, 79, 0.6);
+    border-radius: 35px;
+    box-shadow: 0 15px 35px rgba(47, 128, 237, 0.18);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    padding: 30px 22px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 340px;
+}
 
 
 
@@ -265,46 +228,17 @@
 
 
 
-        #step-7.step.active {
-
+       #step-7.step.active {
     display: flex;
-
     flex-direction: column;
-
-    justify-content: center; 
-
+    justify-content: center;
     align-items: center;
-
-    gap: 15px; 
-
-    height: 100%;
-
-    animation: fadeInStep7suggestii 0.4s ease forwards;
-
+    gap: 15px;
 }
 
-#step7-continue-btn {
-
-    position: absolute;
-
-    left: 50%;
-
-    bottom: -55px;
-
-    transform: translateX(-50%);
-
-}
-
+#step7-continue-btn,
 #confirm-btn {
-
-    position: absolute;
-
-    left: 50%;
-
-    bottom: -55px;
-
-    transform: translateX(-50%);
-
+    margin-top: 18px;
 }
 
 
@@ -620,74 +554,75 @@
             margin-bottom: 5px;
 
         }
+.bg-clouds {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.bg-cloud {
+    position: absolute;
+    background: #fff;
+    border-radius: 50%;
+    opacity: 0.3;
+    animation: cloudDrift 7s ease-in-out infinite alternate;
+}
+
+.bg-cloud::before, .bg-cloud::after {
+    content: '';
+    position: absolute;
+    background: inherit;
+    border-radius: 50%;
+}
+
+@keyframes cloudDrift {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(25px); }
+}
+
+.bg-cloud-1 { width: 150px; height: 55px; top: 8%; left: 5%; }
+.bg-cloud-1::before { width: 85px; height: 85px; top: -42px; left: 15px; }
+.bg-cloud-1::after  { width: 65px; height: 65px; top: -28px; right: 15px; }
+
+.bg-cloud-2 { width: 110px; height: 42px; top: 18%; right: 6%; opacity: 0.22; animation-duration: 9s; }
+.bg-cloud-2::before { width: 55px; height: 55px; top: -28px; left: 10px; }
+.bg-cloud-2::after  { width: 48px; height: 48px; top: -20px; right: 10px; }
+
+.bg-cloud-3 { width: 130px; height: 48px; bottom: 14%; left: 8%; opacity: 0.28; animation-duration: 8s; }
+.bg-cloud-3::before { width: 70px; height: 70px; top: -35px; left: 12px; }
+.bg-cloud-3::after  { width: 55px; height: 55px; top: -22px; right: 12px; }
+
+.bg-cloud-4 { width: 95px; height: 38px; bottom: 22%; right: 10%; opacity: 0.22; animation-duration: 10s; }
+.bg-cloud-4::before { width: 50px; height: 50px; top: -25px; left: 8px; }
+.bg-cloud-4::after  { width: 42px; height: 42px; top: -18px; right: 8px; }
 @media only screen and (max-width: 600px) {
+    .cloud-container { width: 94%; }
 
-    .cloud-container {
-        aspect-ratio: auto;
-        width: 100%;
-        min-height: 480px;
-        height: 90vh;
-        max-height: 620px;
-    }
+    .card { padding: 24px 16px; min-height: auto; }
 
-    .card {
-        width: 78%;
-        height: 62%;
-        margin-top: 15px;
-    }
+    h1, h2 { font-size: 1.15rem; margin-bottom: 0.6rem; }
 
-    h1, h2 {
-        font-size: 1.15rem;
-        margin-bottom: 0.6rem;
-    }
+    p { font-size: 0.85rem; }
 
-    p {
-        font-size: 0.85rem;
-    }
+    button { padding: 8px 16px; font-size: 0.95rem; }
 
-    button {
-        padding: 8px 16px;
-        font-size: 0.95rem;
-    }
+    .grid-options { grid-template-columns: repeat(2, 1fr); }
 
-    .grid-options {
-        grid-template-columns: repeat(2, 1fr);
-    }
+    .option-card { font-size: 0.85rem; padding: 8px 10px; }
 
-    .option-card {
-        font-size: 0.85rem;
-        padding: 8px 10px;
-    }
+    .list-options { max-height: 130px; }
 
-    .list-options {
-        max-height: 130px;
-    }
+    #suggestions-input { min-height: 90px; max-height: 110px; font-size: 0.9rem; }
 
-    #suggestions-input {
-        min-height: 90px;
-        max-height: 110px;
-        font-size: 0.9rem;
-    }
+    .bear { width: 55px; height: 70px; }
 
-    #step7-continue-btn,
-    #confirm-btn {
-        bottom: -45px;
-    }
-
-    .bear {
-        width: 55px;
-        height: 70px;
-    }
+    .bg-cloud { transform: scale(0.7); }
 }
 
 @media only screen and (max-width: 380px) {
-    .card {
-        width: 85%;
-    }
-
-    .grid-options {
-        grid-template-columns: 1fr;
-    }
+    .grid-options { grid-template-columns: 1fr; }
 }
 
     </style>
@@ -700,63 +635,28 @@
 
     <div class="bears-container" id="bears-container"></div>
 
-
+<div class="bg-clouds">
+    <div class="bg-cloud bg-cloud-1"></div>
+    <div class="bg-cloud bg-cloud-2"></div>
+    <div class="bg-cloud bg-cloud-3"></div>
+    <div class="bg-cloud bg-cloud-4"></div>
+</div>
 
     <div class="cloud-container" id="cloud-container">
 
         <svg class="cloud-background" viewBox="0 0 650 480" xmlns="http://www.w3.org/2000/svg">
-
-            <defs>
-
-                <filter id="soft-shadow" x="-10%" y="-10%" width="130%" height="130%">
-
-                    <feDropShadow dx="0" dy="12" stdDeviation="12" flood-color="#2F80ED" flood-opacity="0.15"/>
-
-                </filter>
-
-            </defs>
-
-            
-
-            <g filter="url(#soft-shadow)">
-
-                <path d="M 160,370 
-
-                         C 100,370 60,320 60,260 
-
-                         C 60,200 110,160 170,160 
-
-                         C 170,110 220,60 290,60 
-
-                         C 350,60 390,95 410,130 
-
-                         C 440,100 490,100 530,120 
-
-                         C 580,150 600,200 590,250 
-
-                         C 610,270 620,300 610,330 
-
-                         C 590,370 540,380 490,380
-
-                         C 420,380 230,370 160,370 Z" 
-
-                      fill="#FFFFFF" />
-
-
-
-                <path d="M 85,295 C 130,355 220,360 290,360 C 400,360 520,365 565,335 C 540,360 480,370 410,370 C 240,370 140,350 85,295 Z" 
-
-                      fill="#F1F5F9" />
-
-                      
-
-                <path d="M 85,230 C 85,190 120,175 160,175 M 210,100 C 240,75 290,75 330,85 M 460,125 C 490,115 520,125 540,145" 
-
-                      stroke="#F8FAFC" stroke-width="6" stroke-linecap="round" fill="none" />
-
-            </g>
-
-        </svg>
+    <defs>
+        <filter id="soft-shadow" x="-10%" y="-10%" width="130%" height="130%">
+            <feDropShadow dx="0" dy="12" stdDeviation="12" flood-color="#2F80ED" flood-opacity="0.15"/>
+        </filter>
+    </defs>
+    
+    <g filter="url(#soft-shadow)">
+        <path d="M 160,370 ... Z" fill="#FFFFFF" />
+        <path d="M 85,295 ... Z" fill="#F1F5F9" />
+        <path d="M 85,230 ... " stroke="#F8FAFC" stroke-width="6" stroke-linecap="round" fill="none" />
+    </g>
+</svg>
 
 
 
