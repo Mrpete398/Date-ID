@@ -19,7 +19,11 @@
     
 
     <style>
-
+html, body {
+    height: 100%;
+    overflow: hidden;
+    overscroll-behavior: none;
+}
         /* ================= CSS VARIABLES & RESET ================= */
 
         :root {
@@ -57,16 +61,10 @@
         body {
     background-color: var(--light-blue);
     background-image: linear-gradient(180deg, var(--sky-top) 0%, #DFF1FF 100%);
-    min-height: 100vh;
-    min-height: 100dvh;
+    height: 100dvh;
     width: 100vw;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    overflow-x: hidden;
-    overflow-y: auto;
     position: relative;
-    padding: 8vh 0 20px 0;
+    overflow: hidden;
 }
 
 
@@ -138,9 +136,13 @@
         /* ================= CARTOON CLOUD CONTAINER ================= */
 
         .cloud-container {
-    position: relative;
+    position: absolute;
+    top: 14%;
+    left: 50%;
+    transform: translateX(-50%);
     width: 92%;
     max-width: 480px;
+    max-height: 78dvh;
     z-index: 10;
     animation: cloudFloat 4s ease-in-out infinite alternate;
 }
@@ -200,6 +202,8 @@
     justify-content: center;
     align-items: center;
     min-height: 340px;
+    max-height: 78dvh;
+    overflow-y: auto;
 }
 
 
@@ -870,28 +874,31 @@
 
         let noBtnScale = 1;
 
-        function moveNoBtn() {
-            const noBtn = document.getElementById('nu-btn');
-            noBtn.style.position = 'fixed';
+       function moveNoBtn() {
+    const noBtn = document.getElementById('nu-btn');
+    noBtn.style.position = 'fixed';
 
-            const rect = noBtn.getBoundingClientRect();
-            const w = rect.width || 150;
-            const h = rect.height || 50;
+    const rect = noBtn.getBoundingClientRect();
+    const w = rect.width || 150;
+    const h = rect.height || 50;
 
-            const maxX = Math.max(window.innerWidth - w - 20, 20);
-            const maxY = Math.max(window.innerHeight - h - 20, 20);
+    const vw = document.documentElement.clientWidth;
+    const vh = document.documentElement.clientHeight;
 
-            const x = Math.random() * maxX + 10;
-            const y = Math.random() * maxY + 10;
+    const maxX = Math.max(vw - w - 20, 20);
+    const maxY = Math.max(vh - h - 20, 20);
 
-            noBtn.style.left = `${x}px`;
-            noBtn.style.top = `${y}px`;
+    const x = Math.random() * maxX + 10;
+    const y = Math.random() * maxY + 10;
 
-            if (noBtnScale > 0.4) {
-                noBtnScale -= 0.08;
-                noBtn.style.transform = `scale(${noBtnScale})`;
-            }
-        }
+    noBtn.style.left = `${x}px`;
+    noBtn.style.top = `${y}px`;
+
+    if (noBtnScale > 0.4) {
+        noBtnScale -= 0.08;
+        noBtn.style.transform = `scale(${noBtnScale})`;
+    }
+}
 
 
 
