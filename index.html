@@ -136,23 +136,32 @@ html, body {
 
         /* ================= CARTOON CLOUD CONTAINER ================= */
 
-        .cloud-container {
+        .cloud-wrapper {
     position: absolute;
-    top: 14%;
-    left: 50%;
-    transform: translateX(-50%);
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding-top: 8vh;
+    z-index: 10;
+}
+
+.cloud-container {
+    position: relative;
     width: 92%;
     max-width: 480px;
     max-height: 78dvh;
-    z-index: 10;
     animation: cloudFloat 4s ease-in-out infinite alternate;
 }
 
 
 
-      @keyframes cloudFloat {
-    0% { transform: translateX(-50%) translateY(0px); }
-    100% { transform: translateX(-50%) translateY(-12px); }
+    @keyframes cloudFloat {
+    0% { transform: translateY(0px); }
+    100% { transform: translateY(-12px); }
 }
 
 
@@ -165,10 +174,10 @@ html, body {
 
 
 
-      @keyframes cloudPopAnim {
-    0% { transform: translateX(-50%) scale(1) translateY(0px); }
-    50% { transform: translateX(-50%) scale(1.06) translateY(-5px); }
-    100% { transform: translateX(-50%) scale(1) translateY(0px); }
+     @keyframes cloudPopAnim {
+    0% { transform: scale(1) translateY(0px); }
+    50% { transform: scale(1.06) translateY(-5px); }
+    100% { transform: scale(1) translateY(0px); }
 }
 
 
@@ -635,6 +644,7 @@ html, body {
     <div class="bg-cloud bg-cloud-4"></div>
 </div>
 
+    <div class="cloud-wrapper">
     <div class="cloud-container" id="cloud-container">
 
         <svg class="cloud-background" viewBox="0 0 650 480" xmlns="http://www.w3.org/2000/svg">
@@ -668,6 +678,7 @@ html, body {
                     <button id="nu-btn" onpointerdown="moveNoBtn(event)" style="touch-action: none;">NU sunt OCUPATĂ 😑</button>
 
                 </div>
+ </div>
 
             </div>
 
