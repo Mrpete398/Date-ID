@@ -6,7 +6,7 @@
 
     <meta charset="UTF-8">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
     <title>Vrei să mai facem vreo escapadă? ☁️🐻</title>
 
@@ -23,6 +23,7 @@ html, body {
     height: 100%;
     overflow: hidden;
     overscroll-behavior: none;
+    touch-action: manipulation;
 }
         /* ================= CSS VARIABLES & RESET ================= */
 
@@ -185,7 +186,7 @@ html, body {
 
         /* Zona centrală de conținut */
 
-        .card {
+       .card {
     position: relative;
     z-index: 5;
     width: 100%;
@@ -203,7 +204,6 @@ html, body {
     align-items: center;
     min-height: 340px;
     max-height: 78dvh;
-    overflow-y: auto;
 }
 
 
@@ -537,19 +537,15 @@ html, body {
 
 
 
-        .summary-box {
-
-            text-align: left;
-
-            line-height: 1.6;
-
-            font-size: 0.95rem;
-
-            width: 100%;
-
-            margin: 0;
-
-        }
+     .summary-box {
+    text-align: left;
+    line-height: 1.6;
+    font-size: 0.95rem;
+    width: 100%;
+    margin: 0;
+    max-height: 40dvh;
+    overflow-y: auto;
+}
 
         
 
@@ -676,7 +672,7 @@ html, body {
 
                     <button onclick="acceptDate()">DA ❤️</button>
 
-                    <button id="nu-btn" onmouseover="moveNoBtn()" ontouchstart="moveNoBtnMobile(event)">NU sunt OCUPATĂ 😑</button>
+                    <button id="nu-btn" onpointerdown="moveNoBtn(event)" style="touch-action: none;">NU sunt OCUPATĂ 😑</button>
 
                 </div>
 
@@ -874,7 +870,8 @@ html, body {
 
         let noBtnScale = 1;
 
-       function moveNoBtn() {
+       function moveNoBtn(e) {
+    if (e) e.preventDefault();
     const noBtn = document.getElementById('nu-btn');
     noBtn.style.position = 'fixed';
 
@@ -901,14 +898,6 @@ html, body {
 }
 
 
-
-        function moveNoBtnMobile(e) {
-
-            e.preventDefault();
-
-            moveNoBtn();
-
-        }
 
 
 
