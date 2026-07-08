@@ -137,15 +137,12 @@ html, body {
         /* ================= CARTOON CLOUD CONTAINER ================= */
 
         .cloud-wrapper {
-    position: absolute;
-    top: 0;
+    position: fixed;
+    top: 20px;
     left: 0;
     width: 100%;
-    height: 100%;
     display: flex;
     justify-content: center;
-    align-items: flex-start;
-    padding-top: 3vh;
     z-index: 10;
 }
 
@@ -913,13 +910,18 @@ html, body {
 
         function acceptDate() {
 
-            triggerPop();
+    triggerPop();
 
-            triggerConfetti();
+    triggerConfetti();
 
-            goToStep(2);
+    const noBtn = document.getElementById('nu-btn');
+    if (noBtn) {
+        noBtn.style.display = 'none';
+    }
 
-        }
+    goToStep(2);
+
+}
 
 
 
