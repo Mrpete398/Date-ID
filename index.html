@@ -8,7 +8,7 @@
 
    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-    <title>Vrei să mai facem vreo escapadă? ☁️🐻</title>
+    <title>Vrei să mi te alături într-o escapadă? 🐻</title>
 
     
 
@@ -654,13 +654,13 @@ html, body {
 
             <div id="step-1" class="step active">
 
-                <h1>Vrei să facem o nouă escapadă? ☁️✈️</h1>
+                <h1>Vrei să mi te alături într-o escapadă? </h1>
 
                 <div class="btn-group">
 
-                    <button onclick="acceptDate()">DA ❤️</button>
+                    <button onclick="acceptDate()">DA❤️</button>
 
-                    <button id="nu-btn" onpointerdown="moveNoBtn(event)" style="touch-action: none;">NU sunt OCUPATĂ 😑</button>
+                    <button id="nu-btn" onpointerdown="moveNoBtn(event)" style="touch-action: none;">NU, sunt OCUPATĂ😑</button>
 
                 </div>
 
@@ -686,13 +686,13 @@ html, body {
 
                 <div class="grid-options">
 
+                    <div class="option-card" onclick="triggerPop(); saveOption('time', '14:00', 4)">14:00</div>
+
+                    <div class="option-card" onclick="triggerPop(); saveOption('time', '15:00', 4)">15:00</div> 
+
                     <div class="option-card" onclick="triggerPop(); saveOption('time', '16:00', 4)">16:00</div>
 
-                    <div class="option-card" onclick="triggerPop(); saveOption('time', '17:00', 4)">17:00</div> 
-
-                    <div class="option-card" onclick="triggerPop(); saveOption('time', '18:00', 4)">18:00</div>
-
-                    <div class="option-card" onclick="triggerPop(); saveOption('time', '19:00', 4)">19:00</div>
+                    <div class="option-card" onclick="triggerPop(); saveOption('time', '17:00', 4)">17:00</div>
 
                 </div>
 
@@ -712,7 +712,7 @@ html, body {
 
                     <div class="option-card" onclick="triggerPop(); saveOption('place', 'Parc 🌳', 5)">🌳 Parc</div>
 
-                    <div class="option-card" onclick="triggerPop(); saveOption('place', 'At your place 😜', 5)">😜 At your place</div> 
+                    <div class="option-card" onclick="triggerPop(); saveOption('place', 'Cafenea', 5)">😜 Cafenea</div> 
 
                 </div>
 
@@ -722,7 +722,7 @@ html, body {
 
             <div id="step-5" class="step">
 
-                <h2>Ce film vedem? 🎬</h2>
+                <h2>Dacă ai ales mall, ce film vedem? 🎬</h2>
 
                 <div class="grid-options">
 
@@ -734,7 +734,7 @@ html, body {
 
                     <div class="option-card" onclick="triggerPop(); saveOption('movie', 'Sci-Fi', 6)">Sci-Fi 👽</div>
 
-                    <div class="option-card" onclick="triggerPop(); saveOption('movie', 'Deocheate', 6)">Deocheate 😶</div>
+                    <div class="option-card" onclick="triggerPop(); saveOption('N-am ales mall', '', 6)">N-am ales mall😶</div>
 
                 </div>
 
@@ -744,7 +744,7 @@ html, body {
 
             <div id="step-6" class="step">
 
-                <h2>Ce mai facem? 🎯</h2>
+                <h2>Dacă ai ales parc, ce facem? 🎯</h2>
 
                 <div class="list-options">
 
@@ -759,6 +759,10 @@ html, body {
                     <div class="option-card" onclick="triggerPop(); saveOption('activity', 'Lenevimmm chilling', 7)">😮‍💨 Chilling</div>
 
                     <div class="option-card" onclick="triggerPop(); saveOption('activity', 'Toate de mai sus', 7)">😉 Toate de mai sus</div>
+                    
+                   <div class="option-card" onclick="triggerPop(); saveOption('activity', 'N-am ales parc', 7)">😉 N-am ales parc</div>
+
+
 
                 </div>
 
