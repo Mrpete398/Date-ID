@@ -150,13 +150,10 @@ html, body {
 
 
 
-        @keyframes cloudFloat {
-
-            0% { transform: translateY(0px); }
-
-            100% { transform: translateY(-12px); }
-
-        }
+      @keyframes cloudFloat {
+    0% { transform: translateX(-50%) translateY(0px); }
+    100% { transform: translateX(-50%) translateY(-12px); }
+}
 
 
 
@@ -168,15 +165,11 @@ html, body {
 
 
 
-        @keyframes cloudPopAnim {
-
-            0% { transform: scale(1) translateY(0px); }
-
-            50% { transform: scale(1.06) translateY(-5px); }
-
-            100% { transform: scale(1) translateY(0px); }
-
-        }
+      @keyframes cloudPopAnim {
+    0% { transform: translateX(-50%) scale(1) translateY(0px); }
+    50% { transform: translateX(-50%) scale(1.06) translateY(-5px); }
+    100% { transform: translateX(-50%) scale(1) translateY(0px); }
+}
 
 
 
