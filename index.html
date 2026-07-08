@@ -876,6 +876,11 @@ html, body {
        function moveNoBtn(e) {
     if (e) e.preventDefault();
     const noBtn = document.getElementById('nu-btn');
+
+    if (noBtn.parentElement !== document.body) {
+        document.body.appendChild(noBtn);
+    }
+
     noBtn.style.position = 'fixed';
 
     const rect = noBtn.getBoundingClientRect();
